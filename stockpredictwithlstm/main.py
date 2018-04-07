@@ -10,16 +10,20 @@ import pandas  as pd
 from sklearn import preprocessing
 import numpy as np
 from stockdata import *
+from stock import Stock
 
-Target = ['300024', '002230', '600460', '600570', '600000', '002415', '601318', '600028']
+#Target = ['300024', '002230', '600460', '600570', '600000', '002415', '601318', '600028']
+stock = Stock('http://www.sse.com.cn/js/common/ssesuggestdata.js')
+Target = stock.get_all_list()
 Max_Tx, Max_Feature = creat_stock_csv(Target)
 Norm_Data, Minmax_Data, Sample_Num = creat_stock_data(Target)
 
 Win_Tx = Max_Tx -1
 Input_Feature = Max_Feature
 Pred_Day = 1
+Lab_shape = (Sample_Num, Pred_Day)
 
-def train_lab_pre_data(norm_data, win_tx, pred_day=1):
+def train_lab_pre_data(norm_data, win_tx, lab_shape, pred_day=1):
      train_data = []
      lab_data = []
      pre_data = []
@@ -39,7 +43,7 @@ def train_lab_pre_data(norm_data, win_tx, pred_day=1):
          pre_data.append(prdata)
      train_data = np.array(train_data)
      pre_data = np.array(pre_data)
-     lab_data = np.array(lab_data).reshape((8,1))
+     lab_data = np.array(lab_data).reshape(lab_shape)
      print(np.shape(train_data))
      print(np.shape(lab_data))
      print(np.shape(pre_data))
@@ -48,7 +52,7 @@ def train_lab_pre_data(norm_data, win_tx, pred_day=1):
 
      return train_data, tx, feature, lab_data, pre_data
 
-train_data, Win_Tx, Input_Feature, lab_data, pre_data  = train_lab_pre_data(Norm_Data, Win_Tx, Pred_Day)
+train_data, Win_Tx, Input_Feature, lab_data, pre_data  = train_lab_pre_data(Norm_Data, Win_Tx, Lab_shape, Pred_Day)
 
 
 
