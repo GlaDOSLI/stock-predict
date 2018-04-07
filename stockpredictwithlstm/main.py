@@ -95,9 +95,10 @@ def creat_lstm_model(input_shape, unit_num=64, pred_day=1, drop_rate=0.5):
 lstm_model = creat_lstm_model(input_shape)
 #lstm_model.summary()
 
-lstm_model.fit(train_data, lab_data, batch_size = 1, epochs=1)
+lstm_model.fit(train_data, lab_data, batch_size = 64, epochs=10)
 lstm_model.save('lstm_model.h5')
 predict_out=lstm_model.predict(pre_data, batch_size=1)
 predict_val=np.zeros((Sample_Num, Pred_Day))
 for i in range(Sample_Num):
     predict_val[i] = predict_out[i]*Minmax_Data[i].data_range_[2]+Minmax_Data[i].data_min_[2]
+predict_val[Target.index('600460')]
